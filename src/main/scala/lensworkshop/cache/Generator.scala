@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 
 object Generator {
 
-  def genGroupPair: Gen[UserGroup] = {
+  def genUserGroup: Gen[UserGroup] = {
     for {
       startTime <- Gen.oneOf((1 to 365).map(x => new Date(System.currentTimeMillis() + (x days).toMillis).getTime))
       groupName <- Gen.alphaStr
@@ -23,16 +23,16 @@ object Generator {
     )
   }
 
-  def genGroupMap: Gen[(Map[UserGroupKey, Users], UserGroup)] = {
+  def genUserGroupMap: Gen[(Map[UserGroupKey, Users], UserGroup)] = {
     for {
-      groups <- Gen.nonEmptyListOf(genGroupPair)
+      groups <- Gen.nonEmptyListOf(genUserGroup)
       group <- Gen.oneOf(groups)
     } yield (groups.foldLeft(Map.empty[UserGroupKey, Users])((z, g) => z + (g.key -> g.value)), group)
   }
 
-  def genOverlappingGroupMaps: Gen[(Map[UserGroupKey, Users], Map[UserGroupKey, Users], UserGroupKey)] = {
+  def genOverlappingUserGroupMaps: Gen[(Map[UserGroupKey, Users], Map[UserGroupKey, Users], UserGroupKey)] = {
     for {
-      all <- genGroupMap
+      all <- genUserGroupMap
       map1 <- Gen.pick(all._1.size / 3, all._1)
       map2 <- Gen.pick(all._1.size / 2, all._1)
       if (map1.size > 0 && map2.size > 0)

@@ -9,7 +9,7 @@ import org.scalatest.{Matchers, _}
 
 class CacheConcurrencyTest extends PropSpec with PropertyChecks with Matchers {
 
-  val rawData = Generator.genOverlappingGroupMaps.retryUntil(testData => testData._1.size > 0).sample.get
+  val rawData = Generator.genOverlappingUserGroupMaps.retryUntil(testData => testData._1.size > 0).sample.get
   val cache = new InMemoryCache(cache = rawData._1, diasCache = rawData._2)
 
   property("Retrieve from Cache. First it looks in cache, then in the source of the cache.  If found in source of the cache " +
