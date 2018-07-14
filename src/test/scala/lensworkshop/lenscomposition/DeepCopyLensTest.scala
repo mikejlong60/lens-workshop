@@ -1,6 +1,7 @@
 package lensworkshop.lenscomposition
 
-import lensworkshop.cache.{Generator, Lens}
+import lensworkshop.Generator
+import lensworkshop.cache.Lens
 import lensworkshop.model.{UserGroup, Users}
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks

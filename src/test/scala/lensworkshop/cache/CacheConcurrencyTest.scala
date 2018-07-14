@@ -1,5 +1,6 @@
 package lensworkshop.cache
 
+import lensworkshop.Generator
 import lensworkshop.model.Users
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks

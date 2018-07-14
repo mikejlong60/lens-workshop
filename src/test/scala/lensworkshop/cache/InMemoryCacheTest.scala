@@ -1,5 +1,6 @@
 package lensworkshop.cache
 
+import lensworkshop.Generator
 import lensworkshop.model.{UserGroupKey, Users}
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{Matchers, _}

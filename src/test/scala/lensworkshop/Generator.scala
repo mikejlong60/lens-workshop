@@ -1,9 +1,10 @@
-package lensworkshop.cache
+package lensworkshop
 
 import java.util.Date
 
 import lensworkshop.model.{UserGroup, UserGroupKey, Users}
 import org.scalacheck.Gen
+
 import scala.concurrent.duration._
 
 object Generator {
