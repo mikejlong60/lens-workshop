@@ -17,13 +17,41 @@ class DeepCopyLensTest extends PropSpec with PropertyChecks with Matchers {
   property("should allow deep copy just like how you navigate" +
     "into a mutable structure to change a field in an imperative language " +
     "like Java or Javascript.") {
-    forAll(Generator.genUserGroup) { userGroup: UserGroup =>
+    forAll(Generator.genUserGroup) { whole: UserGroup =>
 
-      Gen.listOf(Gen.alphaStr).sample.map(newUserTokens => {
-        val groupWithNewUserTokens = userGroupUsersUserTokensLens.set(newUserTokens, userGroup)
-        println(newUserTokens)
-        groupWithNewUserTokens.value.userTokens should be(newUserTokens)
+      Gen.listOf(Gen.alphaStr).sample.map(part => {
+        val newWhole = userGroupUsersUserTokensLens.set(part, whole)
+        println(part)
+        newWhole.value.userTokens should be(part)
       })
+    }
+  }
+
+  property("Set after get rule") {
+    forAll(Generator.genUserGroup) { whole: UserGroup =>
+      Gen.listOf(Gen.alphaStr).sample.map { part =>
+        val newWhole = userGroupUsersUserTokensLens.set(userGroupUsersUserTokensLens.get(whole), whole)
+        newWhole should be(whole)
+      }
+    }
+  }
+
+  property("get after set rule") {
+    forAll(Generator.genUserGroup) { whole: UserGroup =>
+      Gen.listOf(Gen.alphaStr).sample.map { part =>
+        val newPart = userGroupUsersUserTokensLens.get(userGroupUsersUserTokensLens.set(part, whole))
+        newPart should be(part)
+      }
+    }
+  }
+
+  property("set after set rule") {
+    forAll(Generator.genUserGroup) { whole: UserGroup =>
+      Gen.listOf(Gen.alphaStr).sample.map { part =>
+        val setAfterSetWhole = userGroupUsersUserTokensLens.set(part, userGroupUsersUserTokensLens.set(part, whole))
+        val setWhole = userGroupUsersUserTokensLens.set(part, whole)
+        setAfterSetWhole should be(setWhole)
+      }
     }
   }
 }
