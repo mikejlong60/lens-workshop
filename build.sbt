@@ -9,5 +9,5 @@ lazy val root = (project in file(".")).
       version      := "0.1.0-SNAPSHOT"
     )),
     name := "lens-workshop",
-    libraryDependencies ++= List(scalaTest, scalaCheck)
+    libraryDependencies ++= List(scalaTest, scalaCheck, monocleCore, monocleLaw, monocleMacro)
   )
