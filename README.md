@@ -3,8 +3,9 @@
 This workshop will focus on practical problems that are elegantly solved using Lenses.  The workshop uses Scala and shows practical examples of how to make a Lens.  You will learn how to make a Lens yourself (10 lines of Scala code) and will build several kinds of Lenses. This workshop purposely shies away from using a 3rd-party Lens library in order to facilitate a deeper understanding of how Lenses work. 
 
 ## Prerequisites
-1. JDK 1.8 
-1. SBT  - Brew install sbt
+1. [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) 
+1. [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+1. [SBT](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Mac.html)
 1. Working knowledge of Scala
 
 ## Syllabus
