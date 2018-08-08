@@ -76,6 +76,25 @@ class TraversalTest extends PropSpec with PropertyChecks with Matchers {
   }
 
 
+  property("Compose Traversal with another traversal with another traversal to reach down three levels deep and change something.") {
+    import monocle.Traversal
+    import scalaz.Applicative
+    import scalaz.std.map._
+    import scalaz.syntax.applicative._
+    import scalaz.syntax.traverse._
+    import scalaz.std.list._ // to get the Traverse instance for List
+    case class Town(residents: List[Resident])
+    case class Resident(firstName: String, lastName: String, address: Address)
+    case class Address(strNumber: Int, streetName: String, iPhones: List[String])
+
+    //val eachResident = Traversal.fromTraverse[List[Resident], Resident]
+    //val residentAddress = Traversal.fromTraverse[Resident, Address]
+
+    //val addressPhoneTrav = addressPhoneLens composeTraversal eachPhone
+
+
+  }
+
   property("Compose Traversal with a Lens to reach into an internal structure and selectively change something.") {
     case class Person(firstName: String, lastName: String, address: Address)
     case class Address(strNumber: Int, streetName: String, iPhones: List[String])
