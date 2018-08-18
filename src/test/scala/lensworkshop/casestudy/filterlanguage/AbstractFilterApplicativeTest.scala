@@ -1,12 +1,11 @@
 package lensworkshop.casestudy.filterlanguage
 
-import ApplicativeInstances._
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Properties
 
 class AbstractFilterApplicativeTest extends Properties("AbstractFilter Applicative Laws test") {
 
-  import filterApplicative._
+  import ApplicativeInstances.filterApplicative._
   type A = Int
   type B = Double
   type C = String
@@ -34,12 +33,12 @@ class AbstractFilterApplicativeTest extends Properties("AbstractFilter Applicati
   // ap(id)(a) == a
   property("identity law") = forAll(AbstractFilterGenerator.genFilter) { conjunctions =>
     val expectedFilter = Filter(predicateConjunctions = conjunctions)
-    ap(pureIdentity)(expectedFilter) == expectedFilter
+    apply(pureIdentity)(expectedFilter) == expectedFilter
   }
 
   // ap(pure(f))(pure(a)) == pure(f(a))
   property("homomorphism law") = forAll { a: A =>
-    ap(pureF)(pure(a)) == pure(f(a))
+    apply(pureF)(pure(a)) == pure(f(a))
   }
 
   // {x => pure(x)}(a) == pure(a)
@@ -53,6 +52,6 @@ class AbstractFilterApplicativeTest extends Properties("AbstractFilter Applicati
     val fGH = f andThen gH
     val pureGH = pure(gH)
     val pureFA = pure(f(a))
-    pure(fGH(a)) == ap(pureGH)(pureFA)
+    pure(fGH(a)) == apply(pureGH)(pureFA)
   }
 }

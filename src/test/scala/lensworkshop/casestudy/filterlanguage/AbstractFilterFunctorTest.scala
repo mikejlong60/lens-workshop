@@ -1,6 +1,6 @@
 package lensworkshop.casestudy.filterlanguage
 
-import lensworkshop.casestudy.filterlanguage.FunctorInstances.filterFunctor
+import FunctorInstances.filterFunctor
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Properties
 
