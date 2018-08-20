@@ -1,7 +1,5 @@
 package lensworkshop.casestudy.filterlanguage
 
-import java.util.Date
-
-case class Tweet(author: String, timestamp: Date, subject: String, body: String)
+case class Tweet(author: String, timestamp: Long, subject: String, body: String)
 
 
