@@ -23,22 +23,15 @@ class AbstractFilterApplicativeTest extends Properties("AbstractFilter Applicati
   val pureF = pure(f)
   val toPureA = { a: INT => pure(a) }
 
-  property("map over it") = forAll(AbstractFilterGenerator.genFilter) { conjunctions =>
-    val expectedFilter = Filter(predicateConjunctions = conjunctions)
-    val mapped = map(expectedFilter)(triplef)
-    //println("crap:" + mapped)
-    true
-  }
-
   // ap(id)(a) == a
   property("identity law") = forAll(AbstractFilterGenerator.genFilter) { conjunctions =>
     val expectedFilter = Filter(predicateConjunctions = conjunctions)
-    apply(pureIdentity)(expectedFilter) == expectedFilter
+    ap(pureIdentity)(expectedFilter) == expectedFilter
   }
 
   // ap(pure(f))(pure(a)) == pure(f(a))
   property("homomorphism law") = forAll { a: INT =>
-    apply(pureF)(pure(a)) == pure(f(a))
+    ap(pureF)(pure(a)) == pure(f(a))
   }
 
   // {x => pure(x)}(a) == pure(a)
@@ -52,32 +45,69 @@ class AbstractFilterApplicativeTest extends Properties("AbstractFilter Applicati
     val fGH = f andThen gH //(Int => Double) => (Double => Int)
     val pureGH = pure(gH) //AbstractFilter[Double => Int]
     val pureFA = pure(f(a)) //AbstractFilter[Double]
-    pure(fGH(a)) == apply(pureGH)(pureFA)
+    pure(fGH(a)) == ap(pureGH)(pureFA)
   }
 
 
-  property("make your own filter") = forAll { a: INT =>
-    val positive: Int => Boolean = _ > 0
-    val negative: Int => Boolean = _ < 0
-    val listOfF = List(pure(positive), pure(negative))
-    val result = listOfF.map(f => apply(f)(pure(a)))
-    println(s"value $a applied list of preds:"+result)
-
-
-
+  property("test apply using a static filter") = forAll { a: INT =>
     val filter = Filter(predicateConjunctions = Map(
       "positive" -> PredicateDisjunction(predicates = List(PredicatePhrase(phrase = (x: Int) => x >  0))),
+      "zero" -> PredicateDisjunction(predicates = List(PredicatePhrase(phrase = (x: Int) => x ==  0))),
       "negative" -> PredicateDisjunction(predicates = List(PredicatePhrase(phrase = (x: Int) => x < 0))),
     ))
 
-    val filterFuncs = filter.predicateConjunctions.values.toList///.map(fff => )//(fff => pure(fff._2))//.toList///.map
-    val result2 = map(pure(-12))(positive)
+    val expectedGTZero = Filter(predicateConjunctions = Map(
+      "positive" -> PredicateDisjunction(predicates = List(PredicatePhrase(true))),
+      "zero" -> PredicateDisjunction(predicates = List(PredicatePhrase(false))),
+      "negative" -> PredicateDisjunction(predicates = List(PredicatePhrase(false))),
+    ))
 
-    println("result:"+result)
-    println("result2:"+result2)
+    val expectedEQZero = Filter(predicateConjunctions = Map(
+      "positive" -> PredicateDisjunction(predicates = List(PredicatePhrase(false))),
+      "zero" -> PredicateDisjunction(predicates = List(PredicatePhrase(true))),
+      "negative" -> PredicateDisjunction(predicates = List(PredicatePhrase(false))),
+    ))
 
-    result == result2 //true
 
+    val expectedLTZero = Filter(predicateConjunctions = Map(
+      "positive" -> PredicateDisjunction(predicates = List(PredicatePhrase(false))),
+      "zero" -> PredicateDisjunction(predicates = List(PredicatePhrase(false))),
+      "negative" -> PredicateDisjunction(predicates = List(PredicatePhrase(true))),
+    ))
+
+    val result = ap(filter)(pure(a))
+
+    a match {
+      case x if x > 0 => result == expectedGTZero
+      case x if x == 0 => result == expectedEQZero
+      case _ => result == expectedLTZero
+    }
+  }
+
+  property("map over it") = forAll(AbstractFilterGenerator.genFilter) { conjunctions =>
+    val filter = Filter(predicateConjunctions = conjunctions)
+    val mapped = map(filter)(triplef)
+    mapped.isInstanceOf[Filter[Int]]
+  }
+
+  property("map over it using a static filter") = forAll { (r1: Short, r2: Short, r3: Short) =>
+    def repeatString(char:String, n: Short) = List.fill(n)(char).mkString
+
+    val as = repeatString("a", r1)
+    val bs = repeatString("b", r2)
+    val cs = repeatString("c", r3)
+
+    val filter = Filter(predicateConjunctions = Map(
+      "foo" -> PredicateDisjunction(predicates = List(PredicatePhrase(as, bs, cs), PredicatePhrase("a","b","c"))),
+      "bar" -> PredicateDisjunction(predicates = List(PredicatePhrase("a","b","c")))
+    ))
+    val actual = map(filter)(triplef)
+
+    val expected = Filter(predicateConjunctions = Map(
+      "foo" -> PredicateDisjunction(predicates = List(PredicatePhrase(as.size + bs.size + cs.size), PredicatePhrase(3))),
+      "bar" -> PredicateDisjunction(predicates = List(PredicatePhrase(3)))
+    ))
+    actual == expected
   }
 
 }
