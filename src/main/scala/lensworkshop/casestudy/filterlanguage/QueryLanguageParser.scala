@@ -42,11 +42,11 @@ object QueryLanguageParser {
 
   def makeFilter(triplesWithMaybeErrors: List[((String, String, String), Option[String])]): Either[List[String], Filter[(String, String, String)]] = {
     val errors = triplesWithMaybeErrors.map(parsedAndValidated => parsedAndValidated._2).flatten
-    val conjunctions = triplesWithMaybeErrors.foldLeft(Map.empty[String, PredicateDisjunction[(String, String, String)]])((accum, subjectPredicatePhrase) => {
-      val subject = subjectPredicatePhrase._1._1
-      val disj = accum.getOrElse(subject, PredicateDisjunction(List.empty[PredicatePhrase[(String, String, String)]]))
-      val newd = PredicateDisjunction(PredicatePhrase(phrase = (subjectPredicatePhrase._1._1, subjectPredicatePhrase._1._2, subjectPredicatePhrase._1._3)) :: disj.predicates)
-      accum + (subject -> newd)
+    val conjunctions = triplesWithMaybeErrors.foldLeft(Map.empty[String, PredicateDisjunction[(String, String, String)]])((accum, subjectPredicatePhraseWithErrors) => {
+      val (subject, predicate, value) = subjectPredicatePhraseWithErrors._1
+      val disjunction = accum.getOrElse(subject, PredicateDisjunction(List.empty[PredicatePhrase[(String, String, String)]]))
+      val newDisjunction = PredicateDisjunction(PredicatePhrase(phrase = (subject, predicate, value)) :: disjunction.predicates)
+      accum + (subject -> newDisjunction)
     })
     if (!errors.isEmpty) Left(errors)
     else Right(Filter(predicateConjunctions = conjunctions))
