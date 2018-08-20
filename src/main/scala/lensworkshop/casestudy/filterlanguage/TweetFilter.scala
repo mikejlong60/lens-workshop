@@ -63,7 +63,7 @@ object TweetFilter {
   }
 
   //TODO Make this function a Monocle Traversal/Fold
-  val filterItOut: AbstractFilter[Boolean] => Boolean = result => result.asInstanceOf[Filter[Boolean]]
+  val filterOutTheTweet: AbstractFilter[Boolean] => Boolean = result => result.asInstanceOf[Filter[Boolean]]
     .predicateConjunctions.map(subjectAndCompoundPredicate => subjectAndCompoundPredicate._2).
     map(predicateDisjunction => predicateDisjunction.asInstanceOf[PredicateDisjunction[Boolean]]
       .predicates.exists(predicatePhrase => predicatePhrase.asInstanceOf[PredicatePhrase[Boolean]].phrase == true))

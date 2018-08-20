@@ -30,7 +30,7 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     ))
 
     val result = ap(filter)(pure(tweet))
-    filterItOut(result) should be(false)
+    filterOutTheTweet(result) should be(false)
     result should be(expected)
   }
 
@@ -38,7 +38,7 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     val tweet = Tweet(author = "bad author name", timestamp = System.currentTimeMillis() - 10000, subject = "Guitar Strings", body = "Luthier guitar strings are really great.")
     val result = ap(filter)(pure(tweet))
 
-    filterItOut(result) should be(true)
+    filterOutTheTweet(result) should be(true)
   }
 
   property("Generate the Filter from the query language string and then apply it to a Tweet") {
@@ -50,9 +50,9 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     val filterSourceCode = filterSourceCodeAndErrors.right.get
     val filterAsProgram = FunctorInstances.filterFunctor.map(filterSourceCode)(tweetFilter)
     val result = ap(filterAsProgram)(pure(tweet))
-    filterItOut(result) should be(false)
+    filterOutTheTweet(result) should be(false)
 
     val tweet2 = Tweet(author = "denise long", timestamp = System.currentTimeMillis() - 10000, subject = "Guitar Strings", body = "Luthier guitar strings are really great.")
-    filterItOut(ap(filterAsProgram)(pure(tweet2))) should be(true)
+    filterOutTheTweet(ap(filterAsProgram)(pure(tweet2))) should be(true)
   }
 }
