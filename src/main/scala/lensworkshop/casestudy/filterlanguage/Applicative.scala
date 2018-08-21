@@ -22,10 +22,13 @@ object ApplicativeInstances {
 
     override def ap[A, B](boxF: AbstractFilter[A => B])(boxA: AbstractFilter[A]): AbstractFilter[B] = (boxF, boxA) match {
       case (PredicatePhrase(f), PredicatePhrase(a)) => pure(f(a))
-      case (PredicateDisjunction(functions), p @ PredicatePhrase(a)) => PredicateDisjunction[B](functions.map(function => ap(function)(p)))
-      case (Filter(conjunctions), p @ PredicatePhrase(a)) => Filter[B](conjunctions.map(pair => pair._1 -> ap(pair._2)(p)))
-      case (PredicatePhrase(f), filter @ Filter(p)) => filterFunctor.map(filter)(f)
-      case (PredicatePhrase(f), dis @ PredicateDisjunction(functions)) => filterFunctor.map(dis)(f)
+      case (PredicateDisjunction(predicatePhrases), p @ PredicatePhrase(_)) => PredicateDisjunction[B](predicatePhrases.map(function => ap(function)(p)))
+      case (Filter(predicateConjunctions), p @ PredicatePhrase(_)) => Filter[B](predicateConjunctions.map(pair => {
+        val (subject, predicateDisjunction) = pair
+        subject -> ap(predicateDisjunction)(p)
+      }))
+      case (PredicatePhrase(f), filter @ Filter(_)) => filterFunctor.map(filter)(f)
+      case (PredicatePhrase(f), dis @ PredicateDisjunction(_)) => filterFunctor.map(dis)(f)
       case _ => Filter(predicateConjunctions = Map.empty[String, AbstractFilter[B]])
     }
   }

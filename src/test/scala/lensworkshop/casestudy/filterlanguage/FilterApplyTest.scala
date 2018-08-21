@@ -48,11 +48,11 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     val filterSourceCodeAndErrors = makeFilter(triplesWithMaybeErrors)
 
     val filterSourceCode = filterSourceCodeAndErrors.right.get
-    val filterAsProgram = FunctorInstances.filterFunctor.map(filterSourceCode)(tweetFilter)
-    val result = ap(filterAsProgram)(pure(tweet))
+    val compiledFilter = FunctorInstances.filterFunctor.map(filterSourceCode)(tweetFilter)
+    val result = ap(compiledFilter)(pure(tweet))
     filterOutTheTweet(result) should be(false)
 
     val tweet2 = Tweet(author = "denise long", timestamp = System.currentTimeMillis() - 10000, subject = "Guitar Strings", body = "Luthier guitar strings are really great.")
-    filterOutTheTweet(ap(filterAsProgram)(pure(tweet2))) should be(true)
+    filterOutTheTweet(ap(compiledFilter)(pure(tweet2))) should be(true)
   }
 }
