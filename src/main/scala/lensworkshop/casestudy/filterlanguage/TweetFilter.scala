@@ -1,5 +1,9 @@
 package lensworkshop.casestudy.filterlanguage
 
+import lensworkshop.casestudy.filterlanguage
+import monocle.{Iso, Lens, PTraversal, Traversal}
+import scalaz.Monoid
+
 object TweetFilter {
   val tweetFilter: Tuple3[String, String, String] => (Tweet => Boolean) = predicatePhrase => {
     val (subject, predicate, value) = predicatePhrase
@@ -69,4 +73,23 @@ object TweetFilter {
       .predicates.exists(predicatePhrase => predicatePhrase.asInstanceOf[PredicatePhrase[Boolean]].phrase == true))
     .exists(subjectPredicate => subjectPredicate == false)
 
+  import scalaz.std.list._ // to get the Traverse instance for List
+
+  val tFilterToBooleans: PTraversal[Filter[Boolean], Filter[Boolean], List[AbstractFilter[Boolean]], List[AbstractFilter[Boolean]]] =
+    Lens[Filter[Boolean], Map[String, AbstractFilter[Boolean]]](whole => whole.asInstanceOf[Filter[Boolean]].predicateConjunctions)(part => whole => whole.copy(predicateConjunctions = part)) composeIso
+    Iso[Map[String, AbstractFilter[Boolean]], List[(String, AbstractFilter[Boolean])]](conjunctions => conjunctions.toList) { conjunctions =>
+      conjunctions.foldLeft(Map.empty[String, AbstractFilter[Boolean]])((accum, fff) => {
+        val (subject, disjunctions) = fff
+        accum + (subject -> disjunctions)
+      })
+    } composeTraversal
+    Traversal.fromTraverse[List, (String, AbstractFilter[Boolean])] composeLens
+    Lens[(String, AbstractFilter[Boolean]), List[AbstractFilter[Boolean]]](whole => whole._2.asInstanceOf[PredicateDisjunction[Boolean]].predicates.asInstanceOf[List[PredicatePhrase[Boolean]]])(part => whole => (whole._1, PredicateDisjunction(part)))
+
+  //TODO The following would be better as a Fold on the traversal
+  def filterOutTheTweet2(filter: Filter[Boolean]) = tFilterToBooleans.getAll(filter).foldLeft(List.empty[Boolean])((accum, as) => {
+    val predPhraseList = as.asInstanceOf[List[PredicatePhrase[Boolean]]]
+    val oneTrue = predPhraseList.exists(pred => pred.phrase == true)
+    oneTrue :: accum
+  }).exists(p => p == false)
 }
