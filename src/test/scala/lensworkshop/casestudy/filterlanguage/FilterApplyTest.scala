@@ -31,7 +31,7 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
 
     val result = ap(filter)(pure(tweet))
     filterOutTheTweet(result) should be(false)
-    filterOutTheTweet2(result.asInstanceOf[Filter[Boolean]]) should be (false)
+    tFilterOutTheTweet(result.asInstanceOf[Filter[Boolean]]) should be (false)
     result should be(expected)
   }
 
@@ -40,7 +40,7 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     val result = ap(filter)(pure(tweet))
 
     filterOutTheTweet(result) should be(true)
-    filterOutTheTweet2(result.asInstanceOf[Filter[Boolean]]) should be (true)
+    tFilterOutTheTweet(result.asInstanceOf[Filter[Boolean]]) should be (true)
   }
 
   property("Generate the Filter from the query language string and then apply it to a Tweet") {
@@ -53,13 +53,13 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     val compiledFilter = FunctorInstances.filterFunctor.map(filterSourceCode)(tweetFilter)
     val result = ap(compiledFilter)(pure(tweet))
     filterOutTheTweet(result) should be(false)
-    filterOutTheTweet2(result.asInstanceOf[Filter[Boolean]]) should be (false)
+    tFilterOutTheTweet(result.asInstanceOf[Filter[Boolean]]) should be (false)
 
     val tweet2 = Tweet(author = "denise long", timestamp = System.currentTimeMillis() - 10000, subject = "Guitar Strings", body = "Luthier guitar strings are really great.")
     val filter2 = ap(compiledFilter)(pure(tweet2))
 
     filterOutTheTweet(filter2) should be(true)
-    filterOutTheTweet2(filter2.asInstanceOf[Filter[Boolean]]) should be (true)
+    tFilterOutTheTweet(filter2.asInstanceOf[Filter[Boolean]]) should be (true)
 
   }
 }
