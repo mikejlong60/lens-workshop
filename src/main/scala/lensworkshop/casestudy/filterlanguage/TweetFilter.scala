@@ -1,8 +1,6 @@
 package lensworkshop.casestudy.filterlanguage
 
-import lensworkshop.casestudy.filterlanguage
 import monocle.{Iso, Lens, PTraversal, Traversal}
-import scalaz.Monoid
 
 object TweetFilter {
   val tweetFilter: Tuple3[String, String, String] => (Tweet => Boolean) = predicatePhrase => {
