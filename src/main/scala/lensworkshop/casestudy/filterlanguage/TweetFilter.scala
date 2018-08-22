@@ -75,10 +75,10 @@ object TweetFilter {
   import scalaz.std.list._ // to get the Traverse instance for List
 
   val tFiltToBools: PTraversal[Filter[Boolean], Filter[Boolean], List[AbstractFilter[Boolean]], List[AbstractFilter[Boolean]]] =
-    Lens[Filter[Boolean], Map[String, AbstractFilter[Boolean]]](whole => whole.asInstanceOf[Filter[Boolean]].predicateConjunctions)(part => whole => whole.copy(predicateConjunctions = part)) composeIso
+    Lens[Filter[Boolean], Map[String, AbstractFilter[Boolean]]](whole => whole.predicateConjunctions)(part => whole => whole.copy(predicateConjunctions = part)) composeIso
       Iso[Map[String, AbstractFilter[Boolean]], List[(String, AbstractFilter[Boolean])]](conjunctions => conjunctions.toList) { conjunctions =>
-        conjunctions.foldLeft(Map.empty[String, AbstractFilter[Boolean]])((accum, fff) => {
-          val (subject, disjunctions) = fff
+        conjunctions.foldLeft(Map.empty[String, AbstractFilter[Boolean]])((accum, tuple) => {
+          val (subject, disjunctions) = tuple
           accum + (subject -> disjunctions)
         })
       } composeTraversal
