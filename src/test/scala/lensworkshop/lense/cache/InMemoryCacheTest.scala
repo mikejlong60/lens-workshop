@@ -1,7 +1,6 @@
-package lensworkshop.cache
+package lensworkshop.lense.cache
 
 import lensworkshop.Generator
-import lensworkshop.model.{UserGroupKey, Users}
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{Matchers, _}
 
@@ -10,7 +9,7 @@ class InMemoryCacheTest extends PropSpec with PropertyChecks with Matchers {
   property("Retrieve from Cache. First it looks in cache, then in the source of the cache.  If found in source of the cache " +
     "it adds it to cache. Then it returns the Users object.  Otherwise it " +
     "returns None.") {
-    forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey, Users], Map[UserGroupKey, Users], UserGroupKey) =>
+    forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey[String], Users[String]], Map[UserGroupKey[String], Users[String]], UserGroupKey[String]) =>
       val cache = InMemoryCache(cache = rawData._1, diasCache = rawData._2)
       val key = rawData._3
       val a = cache.retrieve(key)
@@ -26,7 +25,7 @@ class InMemoryCacheTest extends PropSpec with PropertyChecks with Matchers {
   property("Delete from Cache. After that the cache will look in the source of the cache and return " +
     "what is there if it exists and update the cache accordingly.  " +
     "Otherwise it will just return what's in cache.") {
-    forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey, Users], Map[UserGroupKey, Users], UserGroupKey) =>
+    forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey[String], Users[String]], Map[UserGroupKey[String], Users[String]], UserGroupKey[String]) =>
       val cache = InMemoryCache(cache = rawData._1, diasCache = rawData._2)
       val p = rawData._1
       val key = p.head._1
@@ -44,7 +43,7 @@ class InMemoryCacheTest extends PropSpec with PropertyChecks with Matchers {
   property("Replace in Cache.  Cache always wins. The mechanism will not replace what's in cache with whats in the source of the cache. " +
     "The business rule says that replace does not look in the source of the cache.   It assumes the caller knows " +
     "what he is doing.") {
-    forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey, Users], Map[UserGroupKey, Users], UserGroupKey) =>
+    forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey[String], Users[String]], Map[UserGroupKey[String], Users[String]], UserGroupKey[String]) =>
       val cache = InMemoryCache(cache = rawData._1, diasCache = rawData._2)
       val p = rawData._1
       val key = p.head._1

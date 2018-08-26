@@ -1,7 +1,6 @@
-package lensworkshop.cache
+package lensworkshop.lense.cache
 
 import lensworkshop.Generator
-import lensworkshop.model.Users
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{Matchers, _}

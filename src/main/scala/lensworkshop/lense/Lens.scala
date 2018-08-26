@@ -1,11 +1,11 @@
-package lensworkshop.cache
+package lensworkshop.lense
 
 //The Lens is a generally useful abstraction from category theory that lets you
 //descend deeply into a structure and replace part of it in a pure way.
 //Its useful for many other things such as caching where you would use a Map
 //as the underlying structure.
 //From Edward Kmett talk at: https://vimeo.com/56063074
-//Aand from another Lens talk by Edward Kmett: https://www.youtube.com/watch?v=efv0SQNde5Q
+//And from another Lens talk by Edward Kmett: https://www.youtube.com/watch?v=efv0SQNde5Q
 
 case class Lens[WHOLE, PART](g: WHOLE => PART, s: (PART, WHOLE) => WHOLE) {
   def get(whole: WHOLE): PART = g(whole)
