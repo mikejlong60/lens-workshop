@@ -13,7 +13,7 @@ class DeepCopyLensTest extends PropSpec with PropertyChecks with Matchers {
   val usersUserTokensLens = Lens[Users[String], List[String]](a => a.userTokens, (b, a) => a.copy(userTokens = b))
 
   //Now compose Lenses to make a lens that will replace the UserGroup.Users.userTokens field
-  val userGroupUsersUserTokensLens: Lens[UserGroup[String], List[String]] = userGroupUsersLens andThen usersUserTokensLens //(notificationEventLens).andThen(eventSourceLens)
+  val userGroupUsersUserTokensLens: Lens[UserGroup[String], List[String]] = userGroupUsersLens andThen usersUserTokensLens
 
   property("should allow deep copy just like how you navigate" +
     "into a mutable structure to change a field in an imperative language " +
@@ -22,12 +22,13 @@ class DeepCopyLensTest extends PropSpec with PropertyChecks with Matchers {
 
       Gen.listOf(Gen.alphaStr).sample.map(part => {
         val newWhole = userGroupUsersUserTokensLens.set(part, whole)
-        println(part)
         newWhole.value.userTokens should be(part)
       })
     }
   }
 
+
+  //Set-Get – If you modify something by inserting a particular sub-part,  then you get back exactly what you set.
   property("Set after get rule") {
     forAll(Generator.genUserGroup) { whole: UserGroup[String] =>
       Gen.listOf(Gen.alphaStr).sample.map { part =>
@@ -37,7 +38,8 @@ class DeepCopyLensTest extends PropSpec with PropertyChecks with Matchers {
     }
   }
 
-  property("get after set rule") {
+  //Get-Set – If you modify something by changing its sub-part to exactly what it was before, then nothing happens.
+  property("Get after set rule") {
     forAll(Generator.genUserGroup) { whole: UserGroup[String] =>
       Gen.listOf(Gen.alphaStr).sample.map { part =>
         val newPart = userGroupUsersUserTokensLens.get(userGroupUsersUserTokensLens.set(part, whole))
@@ -46,6 +48,7 @@ class DeepCopyLensTest extends PropSpec with PropertyChecks with Matchers {
     }
   }
 
+  //Set-Set – If you modify something by inserting a particular sub-part and then modify it again,  its exactly as if you only made the second modification.
   property("set after set rule") {
     forAll(Generator.genUserGroup) { whole: UserGroup[String] =>
       Gen.listOf(Gen.alphaStr).sample.map { part =>

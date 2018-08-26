@@ -11,8 +11,6 @@ trait Cache[K, V] {
 case class InMemoryCache(var cache: Map[UserGroupKey[String], Users[String]], diasCache: Map[UserGroupKey[String], Users[String]])
   extends Cache[UserGroupKey[String], Option[Users[String]]] {
 
-  //@volatile var threadVisibleCache = cache
-
   def retrieve(k: UserGroupKey[String]): Option[Users[String]] =
     member(k).get(cache).fold(diasCache.get(k).flatMap(users => replace(k, Some(users))))(users => Some(users))
 
