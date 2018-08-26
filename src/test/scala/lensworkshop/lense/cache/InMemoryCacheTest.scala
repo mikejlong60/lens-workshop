@@ -10,7 +10,7 @@ class InMemoryCacheTest extends PropSpec with PropertyChecks with Matchers {
     "it adds it to cache. Then it returns the Users object.  Otherwise it " +
     "returns None.") {
     forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey[String], Users[String]], Map[UserGroupKey[String], Users[String]], UserGroupKey[String]) =>
-      val cache = InMemoryCache(cache = rawData._1, diasCache = rawData._2)
+      val cache = InMemoryCache(cache = rawData._1, cacheSource = rawData._2)
       val key = rawData._3
       val a = cache.retrieve(key)
 
@@ -26,7 +26,7 @@ class InMemoryCacheTest extends PropSpec with PropertyChecks with Matchers {
     "what is there if it exists and update the cache accordingly.  " +
     "Otherwise it will just return what's in cache.") {
     forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey[String], Users[String]], Map[UserGroupKey[String], Users[String]], UserGroupKey[String]) =>
-      val cache = InMemoryCache(cache = rawData._1, diasCache = rawData._2)
+      val cache = InMemoryCache(cache = rawData._1, cacheSource = rawData._2)
       val p = rawData._1
       val key = p.head._1
       p should contain(key -> p.head._2)
@@ -44,7 +44,7 @@ class InMemoryCacheTest extends PropSpec with PropertyChecks with Matchers {
     "The business rule says that replace does not look in the source of the cache.   It assumes the caller knows " +
     "what he is doing.") {
     forAll(Generator.genOverlappingUserGroupMaps, workers(4)) { rawData: (Map[UserGroupKey[String], Users[String]], Map[UserGroupKey[String], Users[String]], UserGroupKey[String]) =>
-      val cache = InMemoryCache(cache = rawData._1, diasCache = rawData._2)
+      val cache = InMemoryCache(cache = rawData._1, cacheSource = rawData._2)
       val p = rawData._1
       val key = p.head._1
       p should contain(key -> p.head._2)

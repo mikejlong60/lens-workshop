@@ -16,12 +16,11 @@ object Generator {
       projectName <- Gen.alphaStr
       userTokens <- Gen.listOf(Gen.alphaStr)
       timeToLive <- Gen.oneOf(10000 to 1000000)
-    } yield (
-      UserGroup(
+    } yield UserGroup(
         UserGroupKey(projectName = projectName, groupName = groupName),
         value = Users(startTime = startTime, timeToLive = timeToLive, userTokens = userTokens)
       )
-    )
+
   }
 
   def genUserGroupMap: Gen[(Map[UserGroupKey[String], Users[String]], UserGroup[String])] = {
@@ -36,7 +35,7 @@ object Generator {
       all <- genUserGroupMap
       map1 <- Gen.pick(all._1.size / 3, all._1)
       map2 <- Gen.pick(all._1.size / 2, all._1)
-      if (map1.size > 0 && map2.size > 0)
+      if map1.nonEmpty && map2.nonEmpty
       groupName <- Gen.alphaStr
       projectName <- Gen.alphaStr
       key <- Gen.oneOf(map1.head._1, map2.head._1, UserGroupKey(groupName = groupName, projectName = projectName)

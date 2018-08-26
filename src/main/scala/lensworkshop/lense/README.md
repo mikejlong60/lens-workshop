@@ -15,3 +15,5 @@
     1. Get-Put – If you modify something by changing its subpart to exactly what it was before, then nothing happens.
     1. Put-Get – If you modify something by inserting a particular subpart,  then you get back exactly what you put.
     1. Put-Put – If you modify something by inserting a particular subpart and then modify it again,  its exactly as if you only made the second modification.
+1. Lens Cache Example
+    1. 
