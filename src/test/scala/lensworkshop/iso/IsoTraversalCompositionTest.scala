@@ -86,31 +86,9 @@ class IsoTraversalCompositionTest extends PropSpec with PropertyChecks with Matc
 
       val getAll = _predicateToTriple.getAll(predicates)
 
-      println("============" + getAll)
-
       val headOption = _predicateToTriple.headOption(predicates) // should be()
-      println("++++++++++++++" + headOption)
-
       val find = _predicateToTriple.find(l => l._3.size > 3)(predicates) //should be()
-      println("--------" + find)
-
       val all = _predicateToTriple.all(l => l._3.size == 0)(predicates) // should be()
-      println("&&&&&&&&&&&&&&" + all) //t: => Long
-      //      //val sss: (Tuple3[String,String, String], => Tuple3[String,String, String]) => List[Tuple3[String, String, String]] =  (l1:Tuple3[String, String, String], l2: => Tuple3[String, String, String]) => List(l1)
-      //      def sss2(l1: List[Tuple3[String,String, String]], l2: =>List[Tuple3[String,String, String]]): List[Tuple3[String, String, String]] =  l2//(l2: => Tuple3[String, String, String]) => List(l2)
-      //
-      //      def sss3(l1: Option[Tuple3[String,String, String]], l2: =>Option[Tuple3[String,String, String]]): Option[Tuple3[String, String, String]] =  l2//List(l2)//(l2: => Tuple3[String, String, String]) => List(l2)
-      //    def sss4(l1: Predicate, l2: => Predicate): Predicate =  {
-      //      Predicate(l1.predicate + l2.predicate, l1.predicate + l2.predicate, l1.predicate + l2.predicate)
-      //    }//List(l2)//(l2: => Tuple3[String, String, String]) => List(l2)
-      //      //implicit val m = Monoid.instance(sss2, List.empty[Tuple3[String,String, String]])
-      //      implicit val m2 = Monoid.instance(sss3, None)
-      //      implicit val m3 = Monoid.instance(sss4, Predicate("","",""))
-      //      val fold = _tripleToPredicate.asFold//.all(l => l._3.size  == 0)(predicates)// should be()
-      //      val predicates2 = List(("d","df","asdfas"))
-      //      val rrr = fold.fold(predicates2)(m3)
-      //      println("rrr" + rrr)
-      //      //fold.fold(s => )
     }
   }
 
@@ -122,19 +100,10 @@ class IsoTraversalCompositionTest extends PropSpec with PropertyChecks with Matc
     implicit val m3 = Monoid.instance(smasherF, zeroValue)
     val fold = _tripleToPredicate.asFold
     forAll(genListOfTriples) { triples =>
-      val rrr = fold.fold(triples)(m3)
-      println("rrr" + rrr)
+      fold.fold(triples)(m3)
     }
   }
 
-//  sealed trait AbstractFilter
-//
-//  case class Predicate2(subject: String, predicate: String, argument: String) extends AbstractFilter
-//
-//  case class PredicateDisjunction(predicates: List[Predicate2]) extends AbstractFilter
-//
-//  case class Filter(predicateConjunctions: Map[String, PredicateDisjunction]) extends AbstractFilter
-//
 //  property("Test traversal fold with anphe composed traversal") {
 //    def smasherF(l1: Filter, l2: => AbstractFilter): AbstractFilter = {
 //      l2 match {

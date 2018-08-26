@@ -22,7 +22,6 @@ class QueryLanguageParserTest extends PropSpec with PropertyChecks with Matchers
   property("parse bad list element into parts") {
     val query = "author[quals]123;sourc[equals]fred;author[ddd]123"
     val result = tokenize(query).map(parseAndValidate)
-    println(result)
     val numberOfErrors = result.foldLeft(0)((accum, parsedAndValidated) => if (parsedAndValidated._2.isDefined) accum + 1 else accum)
     numberOfErrors should be(3)
   }

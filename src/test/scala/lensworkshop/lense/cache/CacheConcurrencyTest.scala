@@ -17,7 +17,6 @@ class CacheConcurrencyTest extends PropSpec with PropertyChecks with Matchers {
     "returns None.") {
     forAll(Gen.choose(1, rawData._2.size), workers(4), minSuccessful(50000)) { (diasKeyNum: Int) =>
       val keyElemNum = math.abs(diasKeyNum - 1)
-      println(s"${Thread.currentThread()} :: element #:$keyElemNum cache source size: ${cache.diasCache.size} CacheSize: ${cache.cache.size}")
       val key = rawData._2.keys.toList(keyElemNum)
       val a = cache.retrieve(key)
       val v = rawData._1.get(key).fold(rawData._2.get(key))(v => Some(v))

@@ -193,8 +193,6 @@ class TraversalTest extends PropSpec with PropertyChecks with Matchers {
       def modifyGetAllLaw[S, A](t: Traversal[S, A], s: S, f: A => A): Boolean = {
         val l = t.getAll(t.modify(f)(s))
         val r = t.getAll(s).map(f)
-        println(l)
-        println(r)
         l == r
       }
 
@@ -212,8 +210,6 @@ class TraversalTest extends PropSpec with PropertyChecks with Matchers {
       def composedModifyLaw[S, A](t: Traversal[S, A], s: S, f: A => A, g: A => A): Boolean = {
         val l = t.modify(g)(t.modify(f)(s))
         val r = t.modify(g compose f)(s)
-        println(l)
-        println(r)
         l == r
       }
 
