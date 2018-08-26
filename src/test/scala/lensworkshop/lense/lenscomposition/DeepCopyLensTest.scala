@@ -2,7 +2,7 @@ package lensworkshop.lense.lenscomposition
 
 import lensworkshop.Generator
 import lensworkshop.lense.Lens
-import lensworkshop.lense.cache.{UserGroup, Users}
+import lensworkshop.lense.cache.{InMemoryCache, UserGroup, UserGroupKey, Users}
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{Matchers, _}
@@ -14,6 +14,26 @@ class DeepCopyLensTest extends PropSpec with PropertyChecks with Matchers {
 
   //Now compose Lenses to make a lens that will replace the UserGroup.Users.userTokens field
   val userGroupUsersUserTokensLens: Lens[UserGroup[String], List[String]] = userGroupUsersLens andThen usersUserTokensLens
+
+  property("horrid nested copy problem when you need to add a new element") {
+    forAll(Generator.genUserGroup) { whole   =>
+
+      val key  = whole.key
+      val users = whole.value
+      val newUser = "mike"
+      val part = newUser +: users.userTokens
+
+      //Imperative approach -- It gets much worse as a structure has more layers.
+      val newUsers =   users.copy(userTokens = part)
+      val newWholeImperitve = UserGroup(key = key, value = newUsers)
+
+      //Lens approach
+      val newWhole = userGroupUsersUserTokensLens.set(part, whole)
+      newWhole shouldBe (newWholeImperitve)
+
+    }
+
+  }
 
   property("should allow deep copy just like how you navigate" +
     "into a mutable structure to change a field in an imperative language " +
