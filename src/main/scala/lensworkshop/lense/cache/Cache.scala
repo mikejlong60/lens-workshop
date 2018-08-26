@@ -1,6 +1,6 @@
 package lensworkshop.lense.cache
 
-import lensworkshop.lense.Lens.member
+import lensworkshop.lense.cache.MapLens.member
 
 trait Cache[K, V] {
   def retrieve(k: K): V

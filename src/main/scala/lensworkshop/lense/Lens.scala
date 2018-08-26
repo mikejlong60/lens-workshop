@@ -17,10 +17,3 @@ case class Lens[WHOLE, PART](g: WHOLE => PART, s: (PART, WHOLE) => WHOLE) {
   )
   def compose[OTHERLENS](that: Lens[OTHERLENS, WHOLE]): Lens[OTHERLENS, PART] = that andThen this
 }
-
-object Lens {
-  def member[K, V](k: K): Lens[Map[K, V], Option[V]] = Lens[Map[K, V], Option[V]](m => m get k, {
-    case (Some(v), m) => m + (k -> v)
-    case (None, m) => m - k
-  })
-}
