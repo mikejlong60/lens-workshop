@@ -15,11 +15,14 @@ This course consists of five sections which you should master in the following o
 1. Prisms
 1. Traversals
 1. Folds 
-1. Case Study - A Filter Language Compiler - Requires mastery of the Functor and Applicative Functor as well as all the Lense types above.
+1. Case Study - A Filter Language Compiler - Requires mastery of the Functor and Applicative Functor as well as all the Lens types above.
 
-After today's session you can begin anywhere.  But you should make sure you have mastered the material that precedes, especially the Functor and Applicative Functor.  
+After today's session on Lenses you can begin anywhere.  But you should make sure you have mastered the material that precedes, especially the Functor and Applicative Functor.  
 These two ideas from Category Theory are what gives the various abstractions in the Monocle Lense library their composablity.  A Prism composes with a Traversal with an
 Iso with a Lense ad infinitum. Finally the elusive promise of software reuseablity comes to fruition.
+
+The exercises are in the form of partially completed tests.  The actual implementation of these test is in the `answers` branch if
+you get stuck for longer than you can stand.  But remember that if you go that route you will fail the exam;)
 
 
 ## Prerequisites
@@ -28,20 +31,18 @@ Iso with a Lense ad infinitum. Finally the elusive promise of software reuseabli
 1. [SBT](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Mac.html)
 1. Working knowledge of Scala
 
-## Syllabus
-1. Things you can do with Lenses
-    1. View the subpart
-    1. Modify the whole by changing a subpart
-    1. Compose a Lens with another Lens to go deeper
-1. Practical applications of Lenses
-    1. The deep-copy problem
-    1. A cache built using Lenses – A Lens backed by a Map
-1. Other important features 
-    1. They are composable
-    2. You can reason about them equationally.  If your Lens passes the Lens laws tests, it is correct
-1. Lens Laws
-    1. Get-Put – If you modify something by changing its subpart to exactly what it was before, then nothing happens.
-    1. Put-Get – If you modify something by inserting a particular subpart,  then you get back exactly what you put.
-    1. Put-Put – If you modify something by inserting a particular subpart and then modify it again,  its exactly as if you only made the second modification.
-1. Prisms – examples from real life
-1. Traversals – examples from real life
+
+
+TODO
+  1. Completed
+    1. Introduction
+    1. Lens
+    1. Iso
+    1. Traversal
+    
+  1. Not Complete
+    1. Prism
+    1. Folds
+    1. Case Study -  Once you have figured out how to fold over your traversal in tFilterOutTheTweet 
+      1. In the README for this write about the importance of understanding Functors and Applicative Functors, referencing
+      the `Essense of the Iterator Pattern` and the presentation/simple Category Theory library by Daniella Sfergola. 

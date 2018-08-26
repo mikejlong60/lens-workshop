@@ -7,13 +7,13 @@ package lensworkshop.lense
 //From Edward Kmett talk at: https://vimeo.com/56063074
 //And from another Lens talk by Edward Kmett: https://www.youtube.com/watch?v=efv0SQNde5Q
 
-case class Lens[WHOLE, PART](g: WHOLE => PART, s: (PART, WHOLE) => WHOLE) {
-  def get(whole: WHOLE): PART = g(whole)
-  def set(part: PART, whole: WHOLE): WHOLE = s(part, whole)
-  def mod(f: PART => PART, whole: WHOLE): WHOLE = set(f(get(whole)), whole)
-  def andThen[OTHERLENS](l: Lens[PART, OTHERLENS]): Lens[WHOLE, OTHERLENS] = Lens[WHOLE, OTHERLENS](
-    (whole: WHOLE) => l.get(get(whole)),
-    (otherlens: OTHERLENS, whole: WHOLE) => mod(part => l.set(otherlens, part), whole)
+case class Lens[S, A](g: S => A, s: (A, S) => S) {
+  def get(whole: S): A = g(whole)
+  def set(part: A, whole: S): S = s(part, whole)
+  def mod(f: A => A, whole: S): S = set(f(get(whole)), whole)
+  def andThen[OTHERLENS](l: Lens[A, OTHERLENS]): Lens[S, OTHERLENS] = Lens[S, OTHERLENS](
+    (whole: S) => l.get(get(whole)),
+    (otherlens: OTHERLENS, whole: S) => mod(part => l.set(otherlens, part), whole)
   )
-  def compose[OTHERLENS](that: Lens[OTHERLENS, WHOLE]): Lens[OTHERLENS, PART] = that andThen this
+  def compose[OTHERLENS](that: Lens[OTHERLENS, S]): Lens[OTHERLENS, A] = that andThen this
 }

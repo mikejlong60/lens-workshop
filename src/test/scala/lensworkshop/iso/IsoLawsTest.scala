@@ -26,11 +26,16 @@ class IsoLawsTest extends PropSpec with PropertyChecks with Matchers {
     }
   }
 
-  property("Test ISO laws") {
+  property("Test ISO laws - Round Trip One Way") {
     forAll(Gen.alphaStr, Gen.alphaStr) { (predicate, value) =>
       val s = Predicate(predicate, value)
-      val a = (predicate, value)
       roundTripOneWay(predicateToTuple, s) should be(s)
+    }
+  }
+
+  property("Test ISO laws - Round Trip Other Way") {
+    forAll(Gen.alphaStr, Gen.alphaStr) { (predicate, value) =>
+      val a = (predicate, value)
       roundTripOtherWay(predicateToTuple, a) should be(a)
     }
   }

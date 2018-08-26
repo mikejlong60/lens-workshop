@@ -1,5 +1,9 @@
 # Lenses – A Simple Implementation
 
+A Lens is a construct that lets you descend deeply into a  Product structure (e.g. Tuple, Case class, HList, Map) 
+and replace part of it in a pure way.v  Lenses have two type parameters 
+generally called S and A: Lens[S, A] where S represents the Product and A an element inside of S. 
+
 1. Things you can do with Lenses
     1. View the sub-part
     1. Modify the whole by changing a sub-part
