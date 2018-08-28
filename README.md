@@ -7,13 +7,13 @@ Lens library in order to facilitate a deeper understanding of how Lenses work.
 This workshop is not designed to be completed in the time we have here. Rather today we will complete the first module and then 
 you should complete the other modules at your own pace, either at this conference or otherwise. 
 
-This course consists of five sections which you should master in the following order:
+This course consists of six sections which you should master in the following order:
 
 ## Course Modules
-1. Lenses
-1. Isomorphisms(Iso)
+1. [Lenses](./src/main/scala/lensworkshop/lense/README.md)
+1. [Isomorphisms(Iso)](./src/test/scala/lensworkshop/iso/README.md)
 1. Prisms
-1. Traversals
+1. [Traversals](./src/test/scala/lensworkshop/traversal/README.md)
 1. Folds 
 1. [Case Study](./src/main/scala/lensworkshop/casestudy/filterlanguage/README.md) - A Filter Language Compiler - Requires mastery of the Functor and Applicative Functor as well as all the Lens types above.
 
@@ -44,4 +44,4 @@ TODO
   1. Not Complete
     1. Prism
     1. Folds
-    1. Case Study -  Once you have figured out how to fold over your traversal in tFilterOutTheTweet 
+    1. Case Study - Add more meat around folds once you have figured out how to fold over your traversal in tFilterOutTheTweet 
