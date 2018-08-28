@@ -1,5 +1,7 @@
 # Case Study – A Filtering Language
  
+## Case Study Requirements
+
 This project is an abstract filtering language. The requirement driving its design is that there is a data structure, a Tweet, 
 that resides in many places,  in a relational database,  in a stream, in Cassandra, in an Elastic Search index, etc.  And 
 users want to be able to filter out tweets using the same query language regardless of their source.  Of course we want as much reuse as possible.  
@@ -36,10 +38,11 @@ Here is an example: `filter=author[contains]twain~body[contains]injun~body[conta
 
 
 In the preceding example the filter would find Tweets where the `author` contains `twain` and the body contains `injun` or `huck` or `sid` or `tom`. 
-
 This particular query would remove the tweets that came from Shania Twain, finding only those of Mark Twain.
  
-This is a project that demonstrates the usefulness of the Monocle Lens library as well as several important concepts
+## Applicability to the Monocle Library and Lenses, Functors and Applicative Functors
+
+This project demonstrates the usefulness of the Monocle Lens library as well as several important concepts
 from Category Theory, the Functor and the Applicative Functor.  Functors and Applicative Functors are critical to your 
 understanding of Lenses, the later giving the various kinds of Lenses in Monocle their composability. Applicative Functors 
 are everywhere in the tools we use as Scala programmers. SBT, the build tool is essentially an Applicative Functor.
