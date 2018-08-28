@@ -16,10 +16,11 @@ types:
 There is also a Functor and Applicative Functor for the `AbstractFilter`. 
 
 
-A Filter contains a Map of named PredicateDisjunctions(`ors`) that are joined together with an `and` to determine whether or not
-a Tweet meets the filter criteria.
+A `Filter` contains a `Map[Subject -> PredicateDisjunction]` (`ors`) that are joined together with an `and` to determine whether or not
+a Tweet meets the filter criteria.  Each `PredicateDisjunction` is itself a list of `PredicatePhrase`s.  Each triple in the example
+below is parsed from its textual representation in the BNF grammar to a predicate phrase using the Functor.
 
-There is a text-based language with which the user or API interacts with the following BNF grammar:
+Following is the text-based BNF grammar with which the user or API interacts:
 
 ```
 <filter> ::= <filter-expression> <expression-separator> <filter-expression>*
@@ -55,6 +56,7 @@ Before reading much further you should read this paper: [The Essence of the Iter
 
 And also watch this talk on Category Theory by Daniela Sfregola as I make liberal use of her examples in this project: [A Pragmatic Introduction to Category Theory](https://speakerdeck.com/danielasfregola/scalaworld-2017-a-pragmatic-introduction-to-category-theory)
 
+And this talk by [Edward Kmett](https://vimeo.com/56063074) provides the basis of the Monocle Lens library.
 
 Finally, do not despair. This is hard work and takes several months of hard study to understand.  Daniella said it took 6 months
 for her.  And it has taken several years for me to reach my current state and I still have a long way to go. 
