@@ -35,13 +35,13 @@ you get stuck for longer than you can stand.  But remember that if you go that r
 
 TODO
   1. Completed
-    1. Introduction
-    1. Lens
-    1. Iso
-    1. Traversal
-    1. Case Study
+     1. Introduction
+     1. Lens
+     1. Iso
+     1. Traversal
+     1. Case Study
     
   1. Not Complete
-    1. Prism
-    1. Folds
-    1. Case Study - Add more meat around folds once you have figured out how to fold over your traversal in tFilterOutTheTweet 
+     1. Prism
+     1. Folds
+     1. Case Study - Add more meat around folds once you have figured out how to fold over your traversal in tFilterOutTheTweet 
