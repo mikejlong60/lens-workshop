@@ -15,7 +15,7 @@ This course consists of five sections which you should master in the following o
 1. Prisms
 1. Traversals
 1. Folds 
-1. [Case Study](./src/main/lensworkshop/casestudy/filterlanguage/README.md) - A Filter Language Compiler - Requires mastery of the Functor and Applicative Functor as well as all the Lens types above.
+1. [Case Study](./src/main/scala/lensworkshop/casestudy/filterlanguage/README.md) - A Filter Language Compiler - Requires mastery of the Functor and Applicative Functor as well as all the Lens types above.
 
 After today's session on Lenses you can begin anywhere.  But you should make sure you have mastered the material that precedes, especially the Functor and Applicative Functor.  
 These two ideas from Category Theory are what gives the various abstractions in the Monocle Lense library their composablity.  A Prism composes with a Traversal with an
