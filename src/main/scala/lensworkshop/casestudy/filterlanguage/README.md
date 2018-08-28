@@ -2,7 +2,7 @@
  
 ## Case Study Requirements
 
-This project is an abstract filtering language. The requirement driving its design is that there is a data structure, a Tweet, 
+This case study is an abstract filtering language. The requirement driving its design is that there is a data structure, a Tweet, 
 that resides in many places,  in a relational database,  in a stream, in Cassandra, in an Elastic Search index, etc.  And 
 users want to be able to filter out tweets using the same query language regardless of their source.  Of course we want as much reuse as possible.  
 
