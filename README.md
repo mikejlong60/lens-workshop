@@ -43,5 +43,19 @@ TODO
     
   1. Not Complete
      1. Prism
-     1. Folds
-     1. Case Study - Add more meat around folds once you have figured out how to fold over your traversal in tFilterOutTheTweet 
+
+Notes:
+  1. Mention the importance of the Iterator paper to understanding how to use the compositional properties of various 
+  kinds of Optics. Recall that the Monoidal Applicative Functor in the paper is Fold and the Coerce in the paper is Iso.
+  Its especially important that you understand the Applicative Functor and the Functor.
+  1. Give a brief exposition of the composition of Optics in the case study as a teaser to show the usefulness of Optics library.
+  1. Note that traversals do not allow you to skip elements.  They preserve shape. You can collapse things (see fold/crush) but you 
+  cannot skip elements.  Maybe you can reorder them backwards.
+  1. Traverse laws - 
+      1. Traverse applied the identity functor is just fmap.  
+      2. The fusion law - You can compose two traversals into one.
+  traverse (f . g) = traverse f . traverse g 
+      3. Purity law - traverse pure = pure
+  1. Applicative Functors in the context of Traversals have both monadic and monoidal properties.  The improved composability
+   of Applicative Functors makes them more useful for traversals than Monads.
+   

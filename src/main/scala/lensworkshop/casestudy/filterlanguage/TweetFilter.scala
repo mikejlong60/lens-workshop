@@ -1,6 +1,8 @@
 package lensworkshop.casestudy.filterlanguage
 
-import monocle.{Iso, Lens, PTraversal, Traversal}
+import lensworkshop.casestudy.filterlanguage
+import monocle._
+import scalaz.Monoid
 
 object TweetFilter {
   val tweetFilter: Tuple3[String, String, String] => (Tweet => Boolean) = predicatePhrase => {
@@ -64,27 +66,31 @@ object TweetFilter {
     }
   }
 
+  //This is the non-traversal way.  Note how it is not composable at all.
   val filterOutTheTweet: AbstractFilter[Boolean] => Boolean = result => result.asInstanceOf[Filter[Boolean]]
     .predicateConjunctions.map(subjectAndCompoundPredicate => subjectAndCompoundPredicate._2).
     map(predicateDisjunction => predicateDisjunction.asInstanceOf[PredicateDisjunction[Boolean]]
       .predicates.exists(predicatePhrase => predicatePhrase.asInstanceOf[PredicatePhrase[Boolean]].phrase == true))
     .exists(subjectPredicate => subjectPredicate == false)
 
+
+  //This is the traversal way. Each piece is composable again in some other context.
+  //TODO Comment this out for the workshop
   import scalaz.std.list._ // to get the Traverse instance for List
 
-  val tFiltToBools: PTraversal[Filter[Boolean], Filter[Boolean], List[AbstractFilter[Boolean]], List[AbstractFilter[Boolean]]] =
-    Lens[Filter[Boolean], Map[String, AbstractFilter[Boolean]]](whole => whole.predicateConjunctions)(part => whole => whole.copy(predicateConjunctions = part)) composeIso
-      Iso[Map[String, AbstractFilter[Boolean]], List[(String, AbstractFilter[Boolean])]](conjunctions => conjunctions.toList) { conjunctions =>
-        conjunctions.foldLeft(Map.empty[String, AbstractFilter[Boolean]])((accum, tuple) => {
-          val (subject, disjunctions) = tuple
-          accum + (subject -> disjunctions)
-        })
-      } composeTraversal
-      Traversal.fromTraverse[List, (String, AbstractFilter[Boolean])] composeLens
-      Lens[(String, AbstractFilter[Boolean]), List[AbstractFilter[Boolean]]](whole => whole._2.asInstanceOf[PredicateDisjunction[Boolean]].predicates.asInstanceOf[List[PredicatePhrase[Boolean]]])(part => whole => (whole._1, PredicateDisjunction(part)))
+  val lFilterToMap = Lens[Filter[Boolean], Map[String, AbstractFilter[Boolean]]](whole => whole.predicateConjunctions)(part => whole => whole.copy(predicateConjunctions = part))
+  val iMapToPair = Iso[Map[String, AbstractFilter[Boolean]], List[(String, AbstractFilter[Boolean])]](conjunctions => conjunctions.toList) { conjunctions =>
+    conjunctions.foldLeft(Map.empty[String, AbstractFilter[Boolean]])((accum, tuple) => {
+      val (subject, disjunctions) = tuple
+      accum + (subject -> disjunctions)
+    })
+  }
+  val tListToPair = Traversal.fromTraverse[List, (String, AbstractFilter[Boolean])]
+  val lPairToPredicatePhrases = Lens[(String, AbstractFilter[Boolean]), List[PredicatePhrase[Boolean]]](whole => whole._2.asInstanceOf[PredicateDisjunction[Boolean]].predicates.asInstanceOf[List[PredicatePhrase[Boolean]]])(part => whole => (whole._1, PredicateDisjunction(part)))
+  val tFiltToPredicateConjunctions = lFilterToMap composeIso iMapToPair composeTraversal tListToPair composeLens lPairToPredicatePhrases
 
-  //TODO The following would be better as a Fold on the traversal
-  def tFilterOutTheTweet(filter: Filter[Boolean]) = tFiltToBools.getAll(filter)
-    .foldLeft(List.empty[Boolean])((accum, preds) => preds.asInstanceOf[List[PredicatePhrase[Boolean]]].exists(pred => pred.phrase == true) :: accum)
-    .exists(p => p == false)
+  def crush(l1: List[PredicatePhrase[Boolean]], l2: => List[PredicatePhrase[Boolean]]): List[PredicatePhrase[Boolean]] = List(PredicatePhrase(l1.exists(p => p.phrase) && l2.exists(p => p.phrase)))
+  val zeroValue = List(PredicatePhrase(true))
+  val moid: Monoid[List[PredicatePhrase[Boolean]]] = Monoid.instance(crush, zeroValue)
+  val fold: Fold[Filter[Boolean], List[PredicatePhrase[Boolean]]] = tFiltToPredicateConjunctions.asFold
 }
