@@ -74,23 +74,26 @@ object TweetFilter {
     .exists(subjectPredicate => subjectPredicate == false)
 
 
-  //This is the traversal way. Each piece is composable again in some other context.
+  //This is the traversal way. Each piece is composable again in some other context.  Imagine another type of Filter, one that contains an aggregation of SQL queries instead
+  //predicate functions, thus the type parameter.  The only rule is that the crush function must obey the Closure property of Cons. It has to return the same type that it takes as a parameter.
   //TODO Comment this out for the workshop
-  import scalaz.std.list._ // to get the Traverse instance for List
+  def filterToFold[A]: Fold[Filter[A], List[PredicatePhrase[A]]] = {
+    import scalaz.std.list._ // to get the Traverse instance for List
 
-  val lFilterToMap = Lens[Filter[Boolean], Map[String, AbstractFilter[Boolean]]](whole => whole.predicateConjunctions)(part => whole => whole.copy(predicateConjunctions = part))
-  val iMapToPair = Iso[Map[String, AbstractFilter[Boolean]], List[(String, AbstractFilter[Boolean])]](conjunctions => conjunctions.toList) { conjunctions =>
-    conjunctions.foldLeft(Map.empty[String, AbstractFilter[Boolean]])((accum, tuple) => {
-      val (subject, disjunctions) = tuple
-      accum + (subject -> disjunctions)
-    })
+    val lFilterToMap = Lens[Filter[A], Map[String, AbstractFilter[A]]](whole => whole.predicateConjunctions)(part => whole => whole.copy(predicateConjunctions = part))
+    val iMapToPair = Iso[Map[String, AbstractFilter[A]], List[(String, AbstractFilter[A])]](conjunctions => conjunctions.toList) { conjunctions =>
+      conjunctions.foldLeft(Map.empty[String, AbstractFilter[A]])((accum, tuple) => {
+        val (subject, disjunctions) = tuple
+        accum + (subject -> disjunctions)
+      })
+    }
+    val tListToPair = Traversal.fromTraverse[List, (String, AbstractFilter[A])]
+    val lPairToPredicatePhrases = Lens[(String, AbstractFilter[A]), List[PredicatePhrase[A]]](whole => whole._2.asInstanceOf[PredicateDisjunction[A]].predicates.asInstanceOf[List[PredicatePhrase[A]]])(part => whole => (whole._1, PredicateDisjunction(part)))
+    val tFiltToPredicateConjunctions = lFilterToMap composeIso iMapToPair composeTraversal tListToPair composeLens lPairToPredicatePhrases
+    tFiltToPredicateConjunctions.asFold
   }
-  val tListToPair = Traversal.fromTraverse[List, (String, AbstractFilter[Boolean])]
-  val lPairToPredicatePhrases = Lens[(String, AbstractFilter[Boolean]), List[PredicatePhrase[Boolean]]](whole => whole._2.asInstanceOf[PredicateDisjunction[Boolean]].predicates.asInstanceOf[List[PredicatePhrase[Boolean]]])(part => whole => (whole._1, PredicateDisjunction(part)))
-  val tFiltToPredicateConjunctions = lFilterToMap composeIso iMapToPair composeTraversal tListToPair composeLens lPairToPredicatePhrases
 
   def crush(l1: List[PredicatePhrase[Boolean]], l2: => List[PredicatePhrase[Boolean]]): List[PredicatePhrase[Boolean]] = List(PredicatePhrase(l1.exists(p => p.phrase) && l2.exists(p => p.phrase)))
   val zeroValue = List(PredicatePhrase(true))
   val moid: Monoid[List[PredicatePhrase[Boolean]]] = Monoid.instance(crush, zeroValue)
-  val fold: Fold[Filter[Boolean], List[PredicatePhrase[Boolean]]] = tFiltToPredicateConjunctions.asFold
 }

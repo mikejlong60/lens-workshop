@@ -37,7 +37,7 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     val result = ap(filter)(pure(tweet))
     filterOutTheTweet(result) should be(false)
     result should be(expected)
-    val traverseMonoidWay = fold.fold(result.asInstanceOf[Filter[Boolean]])(moid)
+    val traverseMonoidWay = filterToFold[Boolean].fold(result.asInstanceOf[Filter[Boolean]])(moid)
     traverseMonoidWay should be (List(PredicatePhrase(true)))
   }
 
@@ -46,7 +46,7 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     val result = ap(filter)(pure(tweet))
 
     filterOutTheTweet(result) should be(true)
-    val traverseMonoidWay = fold.fold(result.asInstanceOf[Filter[Boolean]])(moid)
+    val traverseMonoidWay = filterToFold[Boolean].fold(result.asInstanceOf[Filter[Boolean]])(moid)
     traverseMonoidWay should be (List(PredicatePhrase(false)))
   }
 
@@ -60,14 +60,14 @@ class FilterApplyTest extends PropSpec with PropertyChecks with Matchers {
     val compiledFilter = FunctorInstances.filterFunctor.map(filterSourceCode)(tweetFilter)
     val result = ap(compiledFilter)(pure(tweet))
     filterOutTheTweet(result) should be(false)
-    val traverseMonoidWay = fold.fold(result.asInstanceOf[Filter[Boolean]])(moid)
+    val traverseMonoidWay = filterToFold[Boolean].fold(result.asInstanceOf[Filter[Boolean]])(moid)
     traverseMonoidWay should be (List(PredicatePhrase(true)))
 
     val tweet2 = Tweet(author = "denise long", timestamp = System.currentTimeMillis() - 10000, subject = "Guitar Strings", body = "Luthier guitar strings are really great.")
     val filter2 = ap(compiledFilter)(pure(tweet2))
 
     filterOutTheTweet(filter2) should be(true)
-    val traverseMonoidWay2 = fold.fold(filter2.asInstanceOf[Filter[Boolean]])(moid)
+    val traverseMonoidWay2 = filterToFold[Boolean].fold(filter2.asInstanceOf[Filter[Boolean]])(moid)
     traverseMonoidWay2 should be (List(PredicatePhrase(false)))
   }
 }
