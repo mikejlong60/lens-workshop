@@ -1,8 +1,8 @@
 # Lenses – A Simple Implementation
 
 A Lens is a construct that lets you descend deeply into a  Product structure (e.g. Tuple, Case class, HList, Map) 
-and replace part of it in a pure way.v  Lenses have two type parameters 
-generally called S and A: Lens[S, A] where S represents the Product and A an element inside of S. 
+and replace part of it in a pure way. Lenses have two type parameters generally called S and A: Lens[S, A] where S 
+represents the Product and A an element inside of S. 
 
 1. Things you can do with Lenses
     1. View the sub-part
@@ -13,7 +13,6 @@ generally called S and A: Lens[S, A] where S represents the Product and A an ele
     functional programmers we can only have pure functions.  So we cannot mutate anything.  And in the act of mutating it 
     we make a copy of it so as not to disturb the original.  However, consider how irritating it is to change something in 
     a deeply nested structure.  See example in DeepCopyLensTest.
-
     
 1. Other important features 
     1. They are composable

@@ -18,8 +18,8 @@ This course consists of six sections which you should master in the following or
 1. [Case Study](./src/main/scala/lensworkshop/casestudy/filterlanguage/README.md) - A Filter Language Compiler - Requires mastery of the Functor and Applicative Functor as well as all the Lens types above.
 
 After today's session on Lenses you can begin anywhere.  But you should make sure you have mastered the material that precedes, especially the Functor and Applicative Functor.  
-These two ideas from Category Theory are what gives the various abstractions in the Monocle Lense library their composablity.  A Prism composes with a Traversal with an
-Iso with a Lense ad infinitum. Finally the elusive promise of software reuseablity comes to fruition.
+These two ideas from Category Theory are what gives the various abstractions in the Monocle Optics library their composability.  A Prism composes with a Traversal with an
+Iso with a Lense ad infinitum. In my experience of the past 30 years reusability has been mostly an illusion until now.
 
 The exercises are in the form of partially completed tests.  The actual implementation of these test is in the `answers` branch if
 you get stuck for longer than you can stand.  But remember that if you go that route you will fail the exam;)

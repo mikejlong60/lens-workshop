@@ -4,7 +4,11 @@
 
 This case study is an abstract filtering language. The requirement driving its design is that there is a data structure, a Tweet, 
 that resides in many places,  in a relational database,  in a stream, in Cassandra, in an Elastic Search index, etc.  And 
-users want to be able to filter out tweets using the same query language regardless of their source.  Of course we want as much reuse as possible.  
+users want to be able to filter out Tweets using the same query language regardless of their source.  Of course we want as much reuse as possible.  
+For example, you need an Applicative Functor to apply the Tweet argument to the ADT but you don’t need an Applicative Functor to turn the query 
+into another form, say a MongoDB doc or  Cassandra Query.  In those cases you only need a Functor to transform the ADT from its raw form of 
+`subject, predicate, value` triples into a Mongo or Cassandra query expression. Note how the big Optic composition has type parameters that
+make it reusable for all cases. And that big Optic composition has algebraic properties. 
 
 There is an Abstract Data Type(ADT) called `AbstractFilter` that describes a filter in terms of `ands` and `ors`.  It has three concrete
 types:
