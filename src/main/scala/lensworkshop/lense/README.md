@@ -25,3 +25,7 @@ represents the Product and A an element inside of S.
     1. Sometimes a Lens does not need to be completely well-behaved to be useful.  In this case I have
     used a Lens backed by a map to implement a completely non-blocking, distributable  cache.  Why is this Lens not well-behaved?
     Is this a bug or is it OK?  
+    
+    
+    
+  [Monocle Lens Docs](https://www.scala-exercises.org/monocle/lens)

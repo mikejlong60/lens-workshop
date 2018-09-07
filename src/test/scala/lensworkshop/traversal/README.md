@@ -4,7 +4,7 @@ A Traversal is a type of lens that has 0 to n targets, allowing you to focus fro
 The canonical example of a Traversal allows you to focus into all the elements inside a container such as a List, Vector, Option, or Map.
 A Traversal is also a fold when used in conjunction with its corresponding Monoidal value.
 
-TODO -- Reference the Monocle docs here. 
+[Monocle Traversal Docs](https://www.scala-exercises.org/monocle/traversal)
 
 ## Traversal Laws
   1. Modify - Get All -  Verifies that you can modify all elements targeted by the Traversal.
