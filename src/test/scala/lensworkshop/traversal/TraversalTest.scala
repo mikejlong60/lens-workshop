@@ -44,7 +44,6 @@ class TraversalTest extends PropSpec with PropertyChecks with Matchers {
     import scalaz.std.list._ // to get the Traverse instance for List
     import monocle.Lens
     val strNumber = Lens[Address, Int](whole => whole.strNumber)(part => whole => whole.copy(strNumber = part))
-    //val strNumber = GenLens[Address](_.strNumber)
     val address = Address(strNumber = 124, streetName = "Rock Court", iPhones = List("540-222-2222", "543-111-1111"))
     strNumber.get(address) should be (124)
     strNumber.set(145)(address) should be (Address(strNumber = 145, streetName = "Rock Court", iPhones = List("540-222-2222", "543-111-1111")))

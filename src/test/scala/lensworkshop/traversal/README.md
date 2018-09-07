@@ -7,12 +7,14 @@ A Traversal is also a fold when used in conjunction with its corresponding Monoi
 [Monocle Traversal Docs](https://www.scala-exercises.org/monocle/traversal)
 
 ## Traversal Laws
+  1. Traverse applied the to identity functor is just fmap.  
+  1. The fusion law - You can compose two traversals into one. traverse (f . g) = traverse f . traverse g 
+  1. Purity law - traverse pure = pure
   1. Modify - Get All -  Verifies that you can modify all elements targeted by the Traversal.
-  1. Compose Modify or Fusion  - This law states that you can compose two functions `f` and `g` across a Traversal `t` over a list
-  `t` in any order as shown here:
-  
-    
-          val l = t.modify(g)(t.modify(f)(s))
-          val r = t.modify(g compose f)(s)
-          l == r
-    
+
+## Other Important Facts about Traversals
+
+  1. Traversals do not allow you to skip elements.  They preserve shape. You can collapse things (see fold/crush) but you 
+  cannot skip elements.
+  1. Applicative Functors in the context of Traversals have both monadic and monoidal properties.  The improved composability
+   of Applicative Functors makes them more useful for traversals than Monads. 
