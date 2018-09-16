@@ -25,9 +25,9 @@ class PrismTest extends PropSpec with PropertyChecks with Matchers {
     jStr.getOption(JStr("Hello")) should be(Some("Hello"))
   }
 
-  val jStrP = Prism.partial[Json, String] { case JStr(v) => v }(JStr)
+  val jStrP = Prism.partial[Json, String] { case JStr(v) => ??? }(???)
 
-  val jNumP = Prism.partial[Json, Int] { case JNum(v) => v }(JNum)
+  val jNumP = Prism.partial[Json, Int] { case JNum(v) => ??? }(???)
 
   def partialRoundTripOneWay[S, A](p: Prism[S, A], s: S): Boolean =
     p.getOption(s) match {
