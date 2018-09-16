@@ -9,8 +9,8 @@ import org.scalatest.{Matchers, _}
 
 class DeepCopyLensTest extends PropSpec with PropertyChecks with Matchers {
 
-  val userGroupUsersLens = Lens[UserGroup[String], Users[String]](a => ???, (b, a) => ???)
-  val usersUserTokensLens = Lens[Users[String], List[String]](a => ???, (b, a) => ???)
+  val userGroupUsersLens: Lens[UserGroup[String], Users[String]] = Lens[UserGroup[String], Users[String]](a => ???, (b, a) => ???)
+  val usersUserTokensLens: Lens[Users[String], List[String]] = Lens[Users[String], List[String]](a => ???, (b, a) => ???)
 
   //Now compose Lenses to make a lens that will replace the UserGroup.Users.userTokens field
   val userGroupUsersUserTokensLens: Lens[UserGroup[String], List[String]] = userGroupUsersLens andThen usersUserTokensLens

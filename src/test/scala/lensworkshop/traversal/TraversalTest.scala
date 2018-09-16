@@ -43,12 +43,13 @@ class TraversalTest extends PropSpec with PropertyChecks with Matchers {
 
     import scalaz.std.list._ // to get the Traverse instance for List
     import monocle.Lens
-    val strNumber = Lens[Address, Int](whole => whole.strNumber)(part => whole => whole.copy(strNumber = part))
+    //NOTE - This uses the Monocle Lens, not my own. That is why it uses the curried form of the set function.
+    val strNumber = Lens[Address, Int](whole => ???)(part => ??? => ???)
     val address = Address(strNumber = 124, streetName = "Rock Court", iPhones = List("540-222-2222", "543-111-1111"))
     strNumber.get(address) should be (124)
     strNumber.set(145)(address) should be (Address(strNumber = 145, streetName = "Rock Court", iPhones = List("540-222-2222", "543-111-1111")))
 
-    val personAddressLens = Lens[Person, Address](whole => whole.address)(part => whole => whole.copy(address = part) )
+    val personAddressLens: Lens[Person, Address] = ???
 
     val personStreetLens = personAddressLens composeLens strNumber
     val person = Person(firstName = "Mike", lastName = "Long", address = address)
@@ -59,8 +60,8 @@ class TraversalTest extends PropSpec with PropertyChecks with Matchers {
     personWithNewAddress should be (Person(firstName = "Mike", lastName = "Long", address = newAddress))
 
 
-    val addressPhoneLens = Lens[Address, List[String]](whole => whole.iPhones)(part => whole => whole.copy(iPhones = part))
-    val eachPhone = Traversal.fromTraverse[List, String]
+    val addressPhoneLens: Lens[Address, List[String]] = ???
+    val eachPhone: Traversal[List[String], String] = ???
 
     val addressPhoneTrav = addressPhoneLens composeTraversal eachPhone
 
@@ -91,7 +92,7 @@ class TraversalTest extends PropSpec with PropertyChecks with Matchers {
         l == r
       }
 
-      val eachL = Traversal.fromTraverse[List, Int]
+      val eachL: Traversal[List[Int], Int] = ???
 
       modifyGetAllLaw(eachL, list, (x: Int) => x + 1) should be(true)
     }
@@ -108,7 +109,7 @@ class TraversalTest extends PropSpec with PropertyChecks with Matchers {
         l == r
       }
 
-      val eachL = Traversal.fromTraverse[List, Int]
+      val eachL: Traversal[List[Int], Int] = ???
 
       composedModifyLaw(eachL, list, (x: Int) => x + 1, (y: Int) => y + 2) == (true)
     }

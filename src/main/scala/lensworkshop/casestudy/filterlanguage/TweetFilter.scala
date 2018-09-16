@@ -80,16 +80,16 @@ object TweetFilter {
   def filterToFold[A]: Fold[Filter[A], List[PredicatePhrase[A]]] = {
     import scalaz.std.list._ // to get the Traverse instance for List
 
-    val lFilterToMap = Lens[Filter[A], Map[String, AbstractFilter[A]]](whole => whole.predicateConjunctions)(part => whole => whole.copy(predicateConjunctions = part))
-    val iMapToPair = Iso[Map[String, AbstractFilter[A]], List[(String, AbstractFilter[A])]](conjunctions => conjunctions.toList) { conjunctions =>
+    val lFilterToMap: Lens[Filter[A], Map[String, AbstractFilter[A]]] = Lens[Filter[A], Map[String, AbstractFilter[A]]](whole => ??? )(part => ??? )
+    val iMapToPair: Iso[Map[String, AbstractFilter[A]], List[(String, AbstractFilter[A])]] = Iso[Map[String, AbstractFilter[A]], List[(String, AbstractFilter[A])]](conjunctions => ??? ) { conjunctions =>
       conjunctions.foldLeft(Map.empty[String, AbstractFilter[A]])((accum, tuple) => {
         val (subject, disjunctions) = tuple
         accum + (subject -> disjunctions)
       })
     }
-    val tListToPair = Traversal.fromTraverse[List, (String, AbstractFilter[A])]
-    val lPairToPredicatePhrases = Lens[(String, AbstractFilter[A]), List[PredicatePhrase[A]]](whole => whole._2.asInstanceOf[PredicateDisjunction[A]].predicates.asInstanceOf[List[PredicatePhrase[A]]])(part => whole => (whole._1, PredicateDisjunction(part)))
-    val tFiltToPredicateConjunctions = lFilterToMap composeIso iMapToPair composeTraversal tListToPair composeLens lPairToPredicatePhrases
+    val tListToPair: Traversal[List[(String, AbstractFilter[A])], (String, AbstractFilter[A])] = ???
+    val lPairToPredicatePhrases: Lens[(String, AbstractFilter[A]), List[PredicatePhrase[A]]] = Lens[(String, AbstractFilter[A]), List[PredicatePhrase[A]]](whole => whole._2.asInstanceOf[PredicateDisjunction[A]].predicates.asInstanceOf[List[PredicatePhrase[A]]])(part => whole => (whole._1, PredicateDisjunction(part)))
+    val tFiltToPredicateConjunctions: PTraversal[Filter[A], Filter[A], List[PredicatePhrase[A]], List[PredicatePhrase[A]]] = lFilterToMap composeIso iMapToPair composeTraversal tListToPair composeLens lPairToPredicatePhrases
     tFiltToPredicateConjunctions.asFold
   }
 
