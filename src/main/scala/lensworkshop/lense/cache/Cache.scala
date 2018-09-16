@@ -12,10 +12,10 @@ case class InMemoryCache(var cache: Map[UserGroupKey[String], Users[String]], ca
   extends Cache[UserGroupKey[String], Option[Users[String]]] {
 
   def retrieve(k: UserGroupKey[String]): Option[Users[String]] =
-    member(k).get(cache).fold(cacheSource.get(k).flatMap(users => replace(k, Some(users))))(users => Some(users))
+    member(k).get(cache).fold(cacheSource.get(k).flatMap(users => ???))(users => ???)
 
   def replace(k: UserGroupKey[String], maybeUsers: Option[Users[String]]): Option[Users[String]] = {
-    cache = member(k).set(maybeUsers, cache)
+    cache = ???
     maybeUsers
   }
 }
