@@ -9,9 +9,9 @@ class IsoLawsTest extends PropSpec with PropertyChecks with Matchers {
 
   case class Predicate(predicate: String, argument: String)
 
-  val predicateToTuple = Iso[Predicate, (String, String)](pred => (pred.predicate, pred.argument)){ case (pred, value) => Predicate(pred, value) }
+  val predicateToTuple = Iso[Predicate, (String, String)](pred => ???){ case (pred, value) => ??? }
 
-  val predicateToTriple = Iso[Predicate, (String, String, String)](pred => ("big daddy", pred.predicate, pred.argument)){ case (_, pred, value) => Predicate(pred, value) }
+  val predicateToTriple = Iso[Predicate, (String, String, String)](pred => ???){ case (_, pred, value) => ??? }
 
   def roundTripOneWay[S, A](i: Iso[S, A], s: S): S = i.reverseGet(i.get(s))
 

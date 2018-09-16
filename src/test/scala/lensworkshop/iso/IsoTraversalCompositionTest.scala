@@ -12,8 +12,8 @@ class IsoTraversalCompositionTest extends PropSpec with PropertyChecks with Matc
 
   import monocle.Iso
 
-  val predicateToTripleIso = Iso[Predicate, (String, String, String)](pred => (pred.subject, pred.predicate, pred.argument)) { case (subject, pred, argument) => Predicate(subject, pred, argument) }
-  val tripleToPredicateIso = Iso[(String, String, String), Predicate](triple => Predicate(triple._1, triple._2, triple._3)) { case pred => (pred.subject, pred.predicate, pred.argument) }
+  val predicateToTripleIso = Iso[Predicate, (String, String, String)](pred => ???) { case (subject, pred, argument) => ??? }
+  val tripleToPredicateIso = Iso[(String, String, String), Predicate](triple => ???) { case pred => ??? }
 
   object IsoLaws {
     def roundTripOneWay[S, A](i: Iso[S, A], s: S): S = i.reverseGet(i.get(s))
@@ -103,26 +103,6 @@ class IsoTraversalCompositionTest extends PropSpec with PropertyChecks with Matc
       fold.fold(triples)(m3)
     }
   }
-
-//  property("Test traversal fold with anphe composed traversal") {
-//    def smasherF(l1: Filter, l2: => AbstractFilter): AbstractFilter = {
-//      l2 match {
-//        case p:Predicate2 => {
-//          val res = l1.predicateConjunctions.getOrElse(p.subject, PredicateDisjunction(List.empty[Predicate2]))
-//          val preds  = p +: res.predicates
-//          PredicateDisjunction(preds)
-//        }
-//      }// Predicate(l1.subject + l2.subject, l1.predicate + l2.predicate, l1.argument + l2.argument)
-//    }
-//    val zeroValue = Filter(Map.empty[String, PredicateDisjunction])
-//    implicit val m3 = Monoid.instance(smasherF, zeroValue)
-//    val fold = _tripleT.asFold
-//    forAll(genListOfTriples) { triples =>
-//      val rrr = fold.fold(triples)(m3)
-//      println("rrr" + rrr)
-//    }
-//  }
-//
 
   import scalaz.std.anyVal._
   import scalaz.std.list._
