@@ -18,7 +18,11 @@ This course consists of six modules which you should master in the following ord
 1. [Folds](./src/test/scala/lensworkshop/fold/README.md) - Traversables are also Folds. In combination with a Monoid they allow you to crush/reduce ... the elements in a traversal
 1. [Case Study](./src/main/scala/lensworkshop/casestudy/filterlanguage/README.md) - This case study is an abstract filtering language. The requirement driving its design is that there is a data structure, a Tweet, 
                                                                                     that resides in many places,  in a relational database,  in a stream, in Cassandra, in an Elastic Search index, etc.  And 
-                                                                                    users want to be able to filter out Tweets using the same query language regardless of their source.  
+                                                                                    users want to be able to filter out Tweets using the same query language regardless of their source.  This case study is smaller version
+                                                                                    of a production project in my paying job.  What is noteworthy about the abstractions here is that it only took 2 functions and about 
+                                                                                    100 lines of code to build an implementation of the filter language compiler that produced MongoDB queries: a 3 line Monoid crush function
+                                                                                    and the actual function that transforms the Abstract Filtering ADT to MongoDB queries that are composed into a single query expression.  
+                                                                                    The Applicative Functor and Functor make this possible.  That's why its so important that you understand them.
                                                                                     
 After today's session on Lenses you can begin anywhere.  But try and gain some mastery of the material that precedes, especially the Functor and Applicative Functor.  
 These two ideas from Category Theory are what gives the various abstractions in the Monocle Optics library their composability.  A Prism composes with a Traversal with an
